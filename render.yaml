@@ -2,7 +2,23 @@ services:
   - type: web
     name: checklist-cargador
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      apt-get update
+      apt-get install -y \
+        build-essential \
+        python3-dev \
+        libcairo2 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
+        libgdk-pixbuf2.0-0 \
+        libffi-dev \
+        shared-mime-info \
+        libxml2 \
+        libxml2-dev \
+        libxslt1-dev \
+        libjpeg62-turbo-dev \
+        zlib1g-dev
+      pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
