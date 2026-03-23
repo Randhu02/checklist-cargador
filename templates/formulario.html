@@ -43,7 +43,7 @@
             <div class="seccion">
                 <h2>📋 DATOS GENERALES</h2>
                 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="grid-3-columnas">
                     <div class="campo">
                         <label>Equipo:</label>
                         <input type="text" name="equipo" required placeholder="N° de equipo">
@@ -65,7 +65,7 @@
             <div class="seccion">
                 <h2>🚛 ENTREGA DE EQUIPO</h2>
                 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="grid-3-columnas">
                     <div class="campo">
                         <label>Hora entrega:</label>
                         <input type="time" name="hora_entrega">
@@ -87,7 +87,7 @@
             <div class="seccion">
                 <h2>🔄 DEVOLUCIÓN DE EQUIPO</h2>
                 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="grid-3-columnas">
                     <div class="campo">
                         <label>Hora devolución:</label>
                         <input type="time" name="hora_devolucion">
@@ -120,11 +120,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Neumáticos, ruedas, tuercas, tapas vástagos</td>
-                            <td>Inflado, fugas, daño, desgaste</td>
-                            <td><input type="radio" name="neumaticos" value="Bueno" required></td>
-                            <td><input type="radio" name="neumaticos" value="Malo"></td>
-                            <td><input type="text" name="coment_neumaticos" placeholder="Observaciones"></td>
+                            <td data-label="Tarea">Neumáticos, ruedas, tuercas, tapas vástagos</td>
+                            <td data-label="Inspección">Inflado, fugas, daño, desgaste</td>
+                            <td data-label="Bueno"><input type="radio" name="neumaticos" value="Bueno" required></td>
+                            <td data-label="Malo"><input type="radio" name="neumaticos" value="Malo"></td>
+                            <td data-label="Comentarios"><input type="text" name="coment_neumaticos" placeholder="Observaciones"></td>
                         </tr>
                         <tr>
                             <td>Cilindros levantamiento, tuberías, mangueras</td>
