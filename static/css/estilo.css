@@ -24,6 +24,7 @@ h1 {
     color: #333;
     margin-bottom: 30px;
     text-align: center;
+    font-size: 1.8em;
 }
 
 .seccion {
@@ -67,6 +68,13 @@ h1 {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+/* Grid de 3 columnas en escritorio */
+.grid-3-columnas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 /* Estilos para la tabla del checklist */
@@ -129,14 +137,49 @@ h1 {
     background-color: #218838;
 }
 
-/* Responsive para móvil */
+/* ========= RESPONSIVE PARA MÓVIL ========= */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
     .container {
         padding: 15px;
     }
     
+    h1 {
+        font-size: 1.4em;
+        margin-bottom: 20px;
+    }
+    
+    .seccion {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .seccion h2 {
+        font-size: 1.1em;
+    }
+    
+    /* Grid de 3 columnas → 1 columna en móvil */
+    .grid-3-columnas {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    /* Campos de formulario más grandes para dedos */
+    .campo input[type="text"],
+    .campo input[type="date"],
+    .campo input[type="time"],
+    .campo textarea {
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 12px;
+    }
+    
+    /* Tabla responsiva: cada fila se convierte en tarjeta */
     .checklist-table {
         border: 0;
+        display: block;
     }
     
     .checklist-table thead {
@@ -144,19 +187,22 @@ h1 {
     }
     
     .checklist-table tr {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         display: block;
         border: 1px solid #ddd;
-        border-radius: 5px;
+        border-radius: 8px;
         padding: 10px;
+        background-color: white;
     }
     
     .checklist-table td {
-        display: block;
-        text-align: right;
-        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 5px;
         border: none;
         border-bottom: 1px solid #eee;
+        text-align: right;
     }
     
     .checklist-table td:last-child {
@@ -165,29 +211,106 @@ h1 {
     
     .checklist-table td::before {
         content: attr(data-label);
-        float: left;
         font-weight: bold;
         color: #007bff;
+        margin-right: 10px;
+        text-align: left;
+        flex: 1;
     }
     
+    /* NUEVO: Estilos especiales para las celdas de Bueno y Malo */
+    /* Hacemos que las celdas de Bueno y Malo se comporten de forma especial */
+    .checklist-table td[data-label="Bueno"],
+    .checklist-table td[data-label="Malo"] {
+        display: inline-flex;
+        width: auto;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-right: 15px;
+        border-bottom: none;
+        padding: 5px 0;
+    }
+    
+    /* Contenedor para agrupar Bueno y Malo en la misma línea */
+    .checklist-table tr {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Agrupamos las celdas de Bueno y Malo en una fila */
+    .checklist-table td[data-label="Bueno"]::before,
+    .checklist-table td[data-label="Malo"]::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #007bff;
+        margin-right: 8px;
+    }
+    
+    /* Para la fila que contiene Bueno y Malo, las mostramos en línea */
+    .checklist-table tr {
+        position: relative;
+    }
+    
+    /* Creamos un contenedor flexible para Bueno y Malo */
+    .checklist-table td[data-label="Bueno"],
+    .checklist-table td[data-label="Malo"] {
+        display: inline-flex;
+        align-items: center;
+        width: auto;
+        flex: 0 0 auto;
+    }
+    
+    /* Aseguramos que Bueno y Malo aparezcan en la misma línea */
+    .checklist-table tr {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    /* Las celdas de Bueno y Malo se colocan en un contenedor flex */
+    .checklist-table tr {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .checklist-table td {
+        flex: 1 1 100%;
+    }
+    
+    /* Bueno y Malo ocupan el espacio que necesitan y se alinean */
+    .checklist-table td[data-label="Bueno"],
+    .checklist-table td[data-label="Malo"] {
+        flex: 0 1 auto;
+        width: auto;
+        min-width: 80px;
+    }
+    
+    /* Radios más grandes para tocar con dedo */
+    .checklist-table input[type="radio"] {
+        width: 22px;
+        height: 22px;
+        transform: scale(1.1);
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    
+    /* Inputs de comentarios en móvil */
     .checklist-table td input[type="text"] {
-        width: 60%;
-    }
-}
-
-/* Estilos para impresión/PDF */
-@media print {
-    body {
-        background-color: white;
-        padding: 0;
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
     }
     
-    .container {
-        box-shadow: none;
-        padding: 0;
-    }
-    
+    /* Botón ocupa todo el ancho */
     .btn-pdf {
-        display: none;
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+    }
+    
+    /* Observaciones */
+    textarea {
+        font-size: 14px;
     }
 }
