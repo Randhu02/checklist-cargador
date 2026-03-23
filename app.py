@@ -1,20 +1,38 @@
-# app.py - Versión optimizada
+# app.py - Versión para Windows con PDFKit
 
 from flask import Flask, render_template, request, send_file
 import os
 from datetime import datetime
 import tempfile
-
-try:
-    from weasyprint import HTML
-    print("WeasyPrint importado correctamente")
-except ImportError:
-    print("Error: WeasyPrint no está instalado")
+import pdfkit
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'tu-clave-secreta-cambiala'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+# Configurar PDFKit para Windows
+# Cambia esta ruta según donde instalaste wkhtmltopdf
+WKHTMLTOPDF_PATH = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+
+# Verificar si existe el ejecutable
+if os.path.exists(WKHTMLTOPDF_PATH):
+    config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)
+    print(f"✅ wkhtmltopdf encontrado en: {WKHTMLTOPDF_PATH}")
+else:
+    print(f"⚠️ No se encontró wkhtmltopdf en: {WKHTMLTOPDF_PATH}")
+    print("Usando configuración por defecto (puede fallar)")
+    config = pdfkit.configuration()
+
+options = {
+    'enable-local-file-access': None,
+    'quiet': '',
+    'print-media-type': None,
+    'margin-top': '0.5cm',
+    'margin-right': '0.5cm',
+    'margin-bottom': '0.5cm',
+    'margin-left': '0.5cm',
+}
 
 @app.route('/')
 def formulario():
@@ -23,36 +41,27 @@ def formulario():
 @app.route('/generar-pdf', methods=['POST'])
 def generar_pdf():
     try:
-        print("Iniciando generación de PDF...")
+        print("Iniciando generación de PDF con PDFKit...")
         
-        # Recolectar datos
         datos_formulario = request.form.to_dict()
         datos_formulario['fecha_generacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
-        # Obtener URL base
         base_url = request.host_url.rstrip('/')
-        print(f"Base URL: {base_url}")
         
-        # Generar HTML
         html_para_pdf = render_template('plantilla_pdf.html', 
                                         datos=datos_formulario,
                                         base_url=base_url)
         
-        print(f"HTML generado, longitud: {len(html_para_pdf)}")
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+            pdfkit.from_string(html_para_pdf, tmp_file.name, 
+                              configuration=config, 
+                              options=options)
+            tmp_path = tmp_file.name
         
-        # OPTIMIZACIÓN: Usar string directamente en lugar de archivo temporal
-        pdf = HTML(string=html_para_pdf).write_pdf()
-        print(f"PDF generado, tamaño: {len(pdf)} bytes")
+        print(f"✅ PDF generado correctamente")
         
-        # Preparar archivo para descarga
         nombre_operador = datos_formulario.get('operador', 'sin_operador').replace(' ', '_')
         fecha_actual = datetime.now().strftime("%Y%m%d_%H%M%S")
         nombre_archivo = f"checklist_{nombre_operador}_{fecha_actual}.pdf"
-        
-        # Guardar temporalmente para enviar
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-            tmp_file.write(pdf)
-            tmp_path = tmp_file.name
         
         return send_file(
             tmp_path,
