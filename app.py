@@ -38,8 +38,15 @@ def generar_pdf():
         # Agregamos fecha y hora de generación
         datos_formulario['fecha_generacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
-        # 2. GENERAR EL PDF - MÉTODO ALTERNATIVO
-        html_para_pdf = render_template('plantilla_pdf.html', datos=datos_formulario)
+        # 2. OBTENER LA URL BASE DEL SERVIDOR
+        # Esto es importante para que las imágenes se carguen correctamente en el PDF
+        base_url = request.host_url.rstrip('/')  # Ej: https://checklist-cargador.onrender.com
+        print(f"Base URL: {base_url}")
+        
+        # 3. GENERAR EL HTML PARA EL PDF (pasando la base_url)
+        html_para_pdf = render_template('plantilla_pdf.html', 
+                                        datos=datos_formulario,
+                                        base_url=base_url)  # ← PASAMOS LA URL BASE
         
         # Guardar el HTML temporalmente para debug
         print("HTML generado, longitud:", len(html_para_pdf))
@@ -58,7 +65,7 @@ def generar_pdf():
         # Limpiar archivo temporal
         os.unlink(temp_html_path)
         
-        # 3. PREPARAR EL ARCHIVO PARA DESCARGA
+        # 4. PREPARAR EL ARCHIVO PARA DESCARGA
         nombre_operador = datos_formulario.get('operador', 'sin_operador').replace(' ', '_')
         fecha_actual = datetime.now().strftime("%Y%m%d_%H%M%S")
         nombre_archivo = f"checklist_{nombre_operador}_{fecha_actual}.pdf"
