@@ -1,5 +1,5 @@
 Flask==2.3.3
-WeasyPrint==68.1
+WeasyPrint==60.2
 Werkzeug==2.3.7
 Jinja2==3.1.2
 gunicorn==21.2.0
