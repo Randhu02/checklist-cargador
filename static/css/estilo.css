@@ -1,0 +1,193 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.seccion {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.seccion h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+/* Estilos para campos de formulario */
+.campo {
+    margin-bottom: 15px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.campo input[type="text"],
+.campo input[type="date"],
+.campo input[type="time"],
+.campo textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+/* Estilos para la tabla del checklist */
+.checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.checklist-table th {
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.checklist-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.checklist-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para radios */
+.checklist-table input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checklist-table input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Botón de generar PDF */
+.boton-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-pdf {
+    background-color: #28a745;
+    color: white;
+    padding: 15px 40px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-pdf:hover {
+    background-color: #218838;
+}
+
+/* Responsive para móvil */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .checklist-table {
+        border: 0;
+    }
+    
+    .checklist-table thead {
+        display: none;
+    }
+    
+    .checklist-table tr {
+        margin-bottom: 20px;
+        display: block;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    
+    .checklist-table td {
+        display: block;
+        text-align: right;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .checklist-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .checklist-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        color: #007bff;
+    }
+    
+    .checklist-table td input[type="text"] {
+        width: 60%;
+    }
+}
+
+/* Estilos para impresión/PDF */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+    
+    .container {
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .btn-pdf {
+        display: none;
+    }
+}

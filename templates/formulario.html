@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Cargador Frontal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <style>
+        /* Estilos adicionales para el formato */
+        .header-pdf {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #003366;
+            color: white;
+            border-radius: 5px;
+        }
+        .header-pdf h2 {
+            margin: 0;
+            color: white;
+        }
+        .sub-header {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+        }
+        .critico {
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-pdf">
+            <h2>FORSUR-I-0285 - FORMATO DE INSPECCIÓN DE CARGADOR FRONTAL</h2>
+            <p>Versión: 05</p>
+        </div>
+        
+        <form action="/generar-pdf" method="POST" id="checklistForm">
+            <!-- SECCIÓN 1: DATOS GENERALES -->
+            <div class="seccion">
+                <h2>📋 DATOS GENERALES</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="campo">
+                        <label>Equipo:</label>
+                        <input type="text" name="equipo" required placeholder="N° de equipo">
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Fecha:</label>
+                        <input type="date" name="fecha" required>
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Operador:</label>
+                        <input type="text" name="operador" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: ENTREGA EQUIPO -->
+            <div class="seccion">
+                <h2>🚛 ENTREGA DE EQUIPO</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="campo">
+                        <label>Hora entrega:</label>
+                        <input type="time" name="hora_entrega">
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Odómetro inicial:</label>
+                        <input type="text" name="odometro_inicial" placeholder="Horas/Km">
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Zona:</label>
+                        <input type="text" name="zona_entrega" placeholder="Zona de trabajo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: DEVOLUCIÓN EQUIPO -->
+            <div class="seccion">
+                <h2>🔄 DEVOLUCIÓN DE EQUIPO</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="campo">
+                        <label>Hora devolución:</label>
+                        <input type="time" name="hora_devolucion">
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Odómetro final:</label>
+                        <input type="text" name="odometro_final" placeholder="Horas/Km">
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Zona:</label>
+                        <input type="text" name="zona_devolucion" placeholder="Zona de trabajo">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: DESDE EL SUELO -->
+            <div class="seccion">
+                <h2>🔧 DESDE EL SUELO</h2>
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Inspección</th>
+                            <th>Bueno</th>
+                            <th>Malo</th>
+                            <th>Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Neumáticos, ruedas, tuercas, tapas vástagos</td>
+                            <td>Inflado, fugas, daño, desgaste</td>
+                            <td><input type="radio" name="neumaticos" value="Bueno" required></td>
+                            <td><input type="radio" name="neumaticos" value="Malo"></td>
+                            <td><input type="text" name="coment_neumaticos" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Cilindros levantamiento, tuberías, mangueras</td>
+                            <td>Desgaste exceso, daños, fugas</td>
+                            <td><input type="radio" name="cilindros" value="Bueno" required></td>
+                            <td><input type="radio" name="cilindros" value="Malo"></td>
+                            <td><input type="text" name="coment_cilindros" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Brazos del bastidor del cargador</td>
+                            <td>Desgaste exceso, daños</td>
+                            <td><input type="radio" name="brazos" value="Bueno" required></td>
+                            <td><input type="radio" name="brazos" value="Malo"></td>
+                            <td><input type="text" name="coment_brazos" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Debajo de la máquina</td>
+                            <td>Fugas, daños</td>
+                            <td><input type="radio" name="debajo" value="Bueno" required></td>
+                            <td><input type="radio" name="debajo" value="Malo"></td>
+                            <td><input type="text" name="coment_debajo" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Transmisión, caja de transferencia</td>
+                            <td>Fugas</td>
+                            <td><input type="radio" name="transmision" value="Bueno" required></td>
+                            <td><input type="radio" name="transmision" value="Malo"></td>
+                            <td><input type="text" name="coment_transmision" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Peldaños y agarraderas</td>
+                            <td>Condición, limpieza</td>
+                            <td><input type="radio" name="peldanos" value="Bueno" required></td>
+                            <td><input type="radio" name="peldanos" value="Malo"></td>
+                            <td><input type="text" name="coment_peldanos" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Tanque de combustible <span class="critico">(Crítico)</span></td>
+                            <td>Nivel (mín 1/4), daños, fugas</td>
+                            <td><input type="radio" name="tanque_combustible" value="Bueno" required></td>
+                            <td><input type="radio" name="tanque_combustible" value="Malo"></td>
+                            <td><input type="text" name="coment_tanque" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Aceite diferencial y mando final</td>
+                            <td>Fugas</td>
+                            <td><input type="radio" name="aceite_diferencial" value="Bueno" required></td>
+                            <td><input type="radio" name="aceite_diferencial" value="Malo"></td>
+                            <td><input type="text" name="coment_diferencial" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Ejes, mandos finales, frenos, sellos <span class="critico">(Crítico)</span></td>
+                            <td>Fugas, daños, desgaste</td>
+                            <td><input type="radio" name="ejes" value="Bueno" required></td>
+                            <td><input type="radio" name="ejes" value="Malo"></td>
+                            <td><input type="text" name="coment_ejes" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Tanque hidráulico <span class="critico">(Crítico)</span></td>
+                            <td>Nivel fluido, daños, fugas</td>
+                            <td><input type="radio" name="tanque_hidraulico" value="Bueno" required></td>
+                            <td><input type="radio" name="tanque_hidraulico" value="Malo"></td>
+                            <td><input type="text" name="coment_hidraulico" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Aceite transmisión <span class="critico">(Crítico)</span></td>
+                            <td>Nivel de fluido</td>
+                            <td><input type="radio" name="aceite_transmision" value="Bueno" required></td>
+                            <td><input type="radio" name="aceite_transmision" value="Malo"></td>
+                            <td><input type="text" name="coment_aceite_trans" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Luces delanteras y traseras <span class="critico">(Crítico)</span></td>
+                            <td>Funcionamiento, daños lentes</td>
+                            <td><input type="radio" name="luces" value="Bueno" required></td>
+                            <td><input type="radio" name="luces" value="Malo"></td>
+                            <td><input type="text" name="coment_luces" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Compartimiento batería</td>
+                            <td>Limpieza, tuercas flojas</td>
+                            <td><input type="radio" name="bateria" value="Bueno" required></td>
+                            <td><input type="radio" name="bateria" value="Malo"></td>
+                            <td><input type="text" name="coment_bateria" placeholder="Observaciones"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECCIÓN 5: COMPARTIMIENTO DEL MOTOR -->
+            <div class="seccion">
+                <h2>⚙️ COMPARTIMIENTO DEL MOTOR</h2>
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Inspección</th>
+                            <th>Bueno</th>
+                            <th>Malo</th>
+                            <th>Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Aceite del motor <span class="critico">(Crítico)</span></td>
+                            <td>Nivel de fluido</td>
+                            <td><input type="radio" name="aceite_motor" value="Bueno" required></td>
+                            <td><input type="radio" name="aceite_motor" value="Malo"></td>
+                            <td><input type="text" name="coment_aceite_motor" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Refrigerante del motor <span class="critico">(Crítico)</span></td>
+                            <td>Nivel de fluido</td>
+                            <td><input type="radio" name="refrigerante" value="Bueno" required></td>
+                            <td><input type="radio" name="refrigerante" value="Malo"></td>
+                            <td><input type="text" name="coment_refrigerante" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Radiador</td>
+                            <td>Obstrucción aletas, fugas</td>
+                            <td><input type="radio" name="radiador" value="Bueno" required></td>
+                            <td><input type="radio" name="radiador" value="Malo"></td>
+                            <td><input type="text" name="coment_radiador" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Todas las mangueras</td>
+                            <td>Fisuras, desgaste, fugas</td>
+                            <td><input type="radio" name="mangueras" value="Bueno" required></td>
+                            <td><input type="radio" name="mangueras" value="Malo"></td>
+                            <td><input type="text" name="coment_mangueras" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Filtros combustible/separador agua</td>
+                            <td>Fugas/agua de drenaje</td>
+                            <td><input type="radio" name="filtros" value="Bueno" required></td>
+                            <td><input type="radio" name="filtros" value="Malo"></td>
+                            <td><input type="text" name="coment_filtros" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Filtro de aire</td>
+                            <td>Indicador obstrucción</td>
+                            <td><input type="radio" name="filtro_aire" value="Bueno" required></td>
+                            <td><input type="radio" name="filtro_aire" value="Malo"></td>
+                            <td><input type="text" name="coment_filtro_aire" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Compartimiento motor</td>
+                            <td>Residuos, tierra, fugas</td>
+                            <td><input type="radio" name="compartimiento_motor" value="Bueno" required></td>
+                            <td><input type="radio" name="compartimiento_motor" value="Malo"></td>
+                            <td><input type="text" name="coment_compartimiento" placeholder="Observaciones"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECCIÓN 6: EN LA MÁQUINA, FUERA DE LA CABINA -->
+            <div class="seccion">
+                <h2>🚜 EN LA MÁQUINA, FUERA DE LA CABINA</h2>
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Inspección</th>
+                            <th>Bueno</th>
+                            <th>Malo</th>
+                            <th>Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Agarraderas</td>
+                            <td>Condición, limpieza</td>
+                            <td><input type="radio" name="agarraderas" value="Bueno" required></td>
+                            <td><input type="radio" name="agarraderas" value="Malo"></td>
+                            <td><input type="text" name="coment_agarraderas" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>ROPS</td>
+                            <td>Daños, pernos flojos</td>
+                            <td><input type="radio" name="rops" value="Bueno" required></td>
+                            <td><input type="radio" name="rops" value="Malo"></td>
+                            <td><input type="text" name="coment_rops" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Extintor/sistema contra incendios</td>
+                            <td>Carga, daños</td>
+                            <td><input type="radio" name="extintor" value="Bueno" required></td>
+                            <td><input type="radio" name="extintor" value="Malo"></td>
+                            <td><input type="text" name="coment_extintor" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Parabrisas, ventanas</td>
+                            <td>Vidrios rotos, limpieza</td>
+                            <td><input type="radio" name="parabrisas" value="Bueno" required></td>
+                            <td><input type="radio" name="parabrisas" value="Malo"></td>
+                            <td><input type="text" name="coment_parabrisas" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Limpia/Lavaparabrisas</td>
+                            <td>Desgaste, daños, nivel fluido</td>
+                            <td><input type="radio" name="limpia" value="Bueno" required></td>
+                            <td><input type="radio" name="limpia" value="Malo"></td>
+                            <td><input type="text" name="coment_limpia" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Puertas</td>
+                            <td>Apertura, vidrios rotos</td>
+                            <td><input type="radio" name="puertas" value="Bueno" required></td>
+                            <td><input type="radio" name="puertas" value="Malo"></td>
+                            <td><input type="text" name="coment_puertas" placeholder="Observaciones"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECCIÓN 7: DENTRO DE LA CABINA -->
+            <div class="seccion">
+                <h2>🪑 DENTRO DE LA CABINA</h2>
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Inspección</th>
+                            <th>Bueno</th>
+                            <th>Malo</th>
+                            <th>Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Asiento</td>
+                            <td>Ajuste altura, peso, alcance pedales</td>
+                            <td><input type="radio" name="asiento" value="Bueno" required></td>
+                            <td><input type="radio" name="asiento" value="Malo"></td>
+                            <td><input type="text" name="coment_asiento" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Puntos de apoyo ingreso a cabina</td>
+                            <td>Operatividad</td>
+                            <td><input type="radio" name="apoyo" value="Bueno" required></td>
+                            <td><input type="radio" name="apoyo" value="Malo"></td>
+                            <td><input type="text" name="coment_apoyo" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Cinturón seguridad y montaje</td>
+                            <td>Daño, desgaste, ajuste</td>
+                            <td><input type="radio" name="cinturon" value="Bueno" required></td>
+                            <td><input type="radio" name="cinturon" value="Malo"></td>
+                            <td><input type="text" name="coment_cinturon" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Bocina, circulina, alarma retroceso, luces <span class="critico">(Crítico)</span></td>
+                            <td>Funcionamiento correcto</td>
+                            <td><input type="radio" name="bocina" value="Bueno" required></td>
+                            <td><input type="radio" name="bocina" value="Malo"></td>
+                            <td><input type="text" name="coment_bocina" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Espejos</td>
+                            <td>Daños, ajuste visibilidad</td>
+                            <td><input type="radio" name="espejos" value="Bueno" required></td>
+                            <td><input type="radio" name="espejos" value="Malo"></td>
+                            <td><input type="text" name="coment_espejos" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Filtro de aire cabina</td>
+                            <td>Tierra, polvo</td>
+                            <td><input type="radio" name="filtro_cabina" value="Bueno" required></td>
+                            <td><input type="radio" name="filtro_cabina" value="Malo"></td>
+                            <td><input type="text" name="coment_filtro_cabina" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Medidores, indicadores, controles</td>
+                            <td>Daños, funcionamiento</td>
+                            <td><input type="radio" name="medidores" value="Bueno" required></td>
+                            <td><input type="radio" name="medidores" value="Malo"></td>
+                            <td><input type="text" name="coment_medidores" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Interior de la cabina</td>
+                            <td>Limpieza</td>
+                            <td><input type="radio" name="interior" value="Bueno" required></td>
+                            <td><input type="radio" name="interior" value="Malo"></td>
+                            <td><input type="text" name="coment_interior" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Freno servicio, neutralizador, estacionamiento <span class="critico">(Crítico)</span></td>
+                            <td>Funcionamiento correcto</td>
+                            <td><input type="radio" name="frenos" value="Bueno" required></td>
+                            <td><input type="radio" name="frenos" value="Malo"></td>
+                            <td><input type="text" name="coment_frenos" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Volante de dirección <span class="critico">(Crítico)</span></td>
+                            <td>Funcionamiento correcto</td>
+                            <td><input type="radio" name="volante" value="Bueno" required></td>
+                            <td><input type="radio" name="volante" value="Malo"></td>
+                            <td><input type="text" name="coment_volante" placeholder="Observaciones"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECCIÓN 8: CUCHARÓN -->
+            <div class="seccion">
+                <h2>⛏️ CUCHARÓN</h2>
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Tarea</th>
+                            <th>Inspección</th>
+                            <th>Bueno</th>
+                            <th>Malo</th>
+                            <th>Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cuchilla empernable</td>
+                            <td>Desgaste exceso, dobladura, daños</td>
+                            <td><input type="radio" name="cuchilla_empernable" value="Bueno" required></td>
+                            <td><input type="radio" name="cuchilla_empernable" value="Malo"></td>
+                            <td><input type="text" name="coment_cuchilla_emp" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Segmento empernable</td>
+                            <td>Desgaste exceso, daños</td>
+                            <td><input type="radio" name="segmento" value="Bueno" required></td>
+                            <td><input type="radio" name="segmento" value="Malo"></td>
+                            <td><input type="text" name="coment_segmento" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Protector de base lateral</td>
+                            <td>Desgaste exceso, daños</td>
+                            <td><input type="radio" name="protector" value="Bueno" required></td>
+                            <td><input type="radio" name="protector" value="Malo"></td>
+                            <td><input type="text" name="coment_protector" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Cuchilla base</td>
+                            <td>Desgaste exceso, dobladura, daños</td>
+                            <td><input type="radio" name="cuchilla_base" value="Bueno" required></td>
+                            <td><input type="radio" name="cuchilla_base" value="Malo"></td>
+                            <td><input type="text" name="coment_cuchilla_base" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Borde ataque cucharón, vertedera</td>
+                            <td>Desgaste exceso, dobladura, daños</td>
+                            <td><input type="radio" name="borde" value="Bueno" required></td>
+                            <td><input type="radio" name="borde" value="Malo"></td>
+                            <td><input type="text" name="coment_borde" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Plancha lateral, inferior</td>
+                            <td>Desgaste exceso, daños</td>
+                            <td><input type="radio" name="plancha" value="Bueno" required></td>
+                            <td><input type="radio" name="plancha" value="Malo"></td>
+                            <td><input type="text" name="coment_plancha" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Cordón soldadura</td>
+                            <td>Fractura</td>
+                            <td><input type="radio" name="soldadura" value="Bueno" required></td>
+                            <td><input type="radio" name="soldadura" value="Malo"></td>
+                            <td><input type="text" name="coment_soldadura" placeholder="Observaciones"></td>
+                        </tr>
+                        <tr>
+                            <td>Pasadores y bujes</td>
+                            <td>Desgaste exceso, daños</td>
+                            <td><input type="radio" name="pasadores" value="Bueno" required></td>
+                            <td><input type="radio" name="pasadores" value="Malo"></td>
+                            <td><input type="text" name="coment_pasadores" placeholder="Observaciones"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SECCIÓN 9: OBSERVACIONES -->
+            <div class="seccion">
+                <h2>📝 OBSERVACIONES</h2>
+                <textarea name="observaciones" rows="5" 
+                          placeholder="Ingrese observaciones adicionales, daños encontrados, recomendaciones..." 
+                          style="width: 100%; padding: 10px; font-size: 14px;"></textarea>
+            </div>
+            
+            <!-- BOTÓN PARA GENERAR PDF -->
+            <div class="boton-container">
+                <button type="submit" class="btn-pdf">📄 GENERAR PDF</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

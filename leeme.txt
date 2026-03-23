@@ -1,0 +1,3 @@
+cd C:\Users\Usuario\Desktop\PROYECTO TISUR\formatos_digitales
+venv\Scripts\activate
+python app.py

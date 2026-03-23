@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>FORSUR-I-0285 Checklist Cargador Frontal</title>
+    <style>
+        /* Estilo EXACTO como tu Excel */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0.5cm;
+            font-size: 8pt;
+        }
+        
+        /* Encabezado estilo Excel */
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .header h1 {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 0;
+            color: black;
+        }
+        .header h2 {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .header .codigo {
+            font-size: 10pt;
+            text-align: right;
+            border-bottom: 1px solid black;
+            padding-bottom: 3px;
+        }
+        
+        /* Tabla de datos principal */
+        .datos-principal {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            border: 1px solid black;
+        }
+        .datos-principal td, .datos-principal th {
+            border: 1px solid black;
+            padding: 4px;
+            font-size: 8pt;
+        }
+        .datos-principal th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Título de sección - 75% (TAREAS + INSPECCIÓN + Bueno + Malo) */
+        .seccion-titulo {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 10pt;
+            padding: 5px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+            border: 1px solid black;
+            width: 75%;
+        }
+
+        /* Tablas de inspección */
+        .tabla-inspeccion {
+            width: 97%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+            border: 1px solid black;
+        }
+
+        /* Definición de anchos de columnas DENTRO de la tabla */
+        .tabla-inspeccion th:nth-child(1),
+        .tabla-inspeccion td:nth-child(1) { width: 25%; }  /* TAREAS */
+
+        .tabla-inspeccion th:nth-child(2),
+        .tabla-inspeccion td:nth-child(2) { width: 25%; }  /* INSPECCIÓN */
+
+        .tabla-inspeccion th:nth-child(3),
+        .tabla-inspeccion td:nth-child(3) { width: 5%; }   /* Bueno */
+
+        .tabla-inspeccion th:nth-child(4),
+        .tabla-inspeccion td:nth-child(4) { width: 5%; }   /* Malo */
+
+        .tabla-inspeccion th:nth-child(5),
+        .tabla-inspeccion td:nth-child(5) { width: 40%; }  /* Comentarios */
+
+        .tabla-inspeccion th {
+            background-color: #f0f0f0;
+            border: 1px solid black;
+            padding: 2px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 8pt;
+        }
+
+        .tabla-inspeccion td {
+            border: 1px solid black;
+            padding: 2px;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        
+        /* Columnas de Bueno/Malo */
+        .col-bueno, .col-malo {
+            text-align: center;
+            background-color: #f0f0f0;
+            white-space: nowrap;
+        }
+        
+        .contenedor-imagenes {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .imagen-item {
+            text-align: center;
+        }
+
+        .imagen-item img {
+            max-width: 100%;
+            max-height: 110px;
+        }
+
+        /* Espacio entre imágenes usando un elemento invisible o padding en el contenedor */
+        .imagen-item:not(:last-child)::after {
+            content: "";
+            display: block;
+            height: 30px;  /* ← Ajusta este valor para más/menos espacio */
+        }
+        
+        /* Observaciones y firmas */
+        .observaciones-box {
+            border: 1px solid black;
+            padding: 8px;
+            margin-top: 15px;
+            min-height: 60px;
+            width: 100%;
+        }
+        .firmas {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+        .firmas td {
+            border: none;
+            padding: 5px;
+            text-align: center;
+            width: 33%;
+        }
+        
+        @page {
+            size: A4;
+            margin: 0.5cm;
+        }
+
+    /* ========= NUEVA REGLA PARA LA PÁGINA DE REGLAS ========= */
+    .reglas-page {
+        page: reglas;
+    }
+    
+    @page reglas {
+        size: A4 landscape;
+        margin: 0.5cm;
+    }
+    
+</style>
+</head>
+<body>
+    <!-- ENCABEZADO -->
+    <div class="header">
+        <div class="codigo">FORSUR-I-0285</div>
+        <h1>FORMATO DE INSPECCIÓN DE CARGADOR FRONTAL</h1>
+        <h2>VER: 05</h2>
+    </div>
+
+    <!-- DATOS PRINCIPALES -->
+    <table class="datos-principal">
+        <tr>
+            <th width="30%">DATOS</th>
+            <th width="35%">ENTREGA EQUIPO</th>
+            <th width="35%">DEVOLUCIÓN EQUIPO</th>
+        </tr>
+        <tr>
+            <td><strong>Equipo:</strong> {{ datos.equipo or '' }}</td>
+            <td><strong>Operador:</strong> {{ datos.operador or '' }}</td>
+            <td><strong>Operador:</strong> {{ datos.operador or '' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Fecha:</strong> {{ datos.fecha or '' }}</td>
+            <td><strong>Hora entrega:</strong> {{ datos.hora_entrega or '' }}</td>
+            <td><strong>Hora devolución:</strong> {{ datos.hora_devolucion or '' }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><strong>Odómetro inicial:</strong> {{ datos.odometro_inicial or '' }}</td>
+            <td><strong>Odómetro final:</strong> {{ datos.odometro_final or '' }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><strong>Zona:</strong> {{ datos.zona_entrega or '' }}</td>
+            <td><strong>Zona:</strong> {{ datos.zona_devolucion or '' }}</td>
+        </tr>
+    </table>
+
+    <!-- TÍTULO DE INSPECCIÓN -->
+    <table style="width:100%; margin-top:5px; margin-bottom:5px; border:none;">
+        <tr>
+            <td style="border:none; font-weight:bold;">INSPECCIÓN</td>
+            <td style="border:none; width:50px; text-align:center;">P</td>
+            <td style="border:none; width:50px; text-align:center;">Bueno</td>
+            <td style="border:none; width:50px; text-align:center;">X</td>
+            <td style="border:none; width:50px; text-align:center;">Malo</td>
+        </tr>
+    </table>
+
+    <!-- ENCABEZADO DE TABLA PRINCIPAL -->
+    <table class="tabla-inspeccion">
+        <tr>
+            <th>TAREAS ¿Qué está inspeccionando?</th>
+            <th>¿Qué está buscando?</th>
+            <th>Bueno</th>
+            <th>Malo</th>
+            <th>Comentarios del operador</th>
+        </tr>
+    </table>
+
+    <!-- ========================================= -->
+    <!-- UNA SOLA TABLA GRANDE QUE CONTIENE TODAS LAS SECCIONES -->
+    <!-- CON UNA SOLA COLUMNA DE IMÁGENES PARA TODAS LAS SECCIONES -->
+    <!-- ========================================= -->
+    <table class="tabla-inspeccion">
+
+        <!-- ========= SECCIÓN 1: DESDE EL SUELO ========= -->
+        <!-- FILA TÍTULO DE SECCIÓN -->
+        <tr>
+            <td colspan="1" style="background-color: #e6f0ff; font-weight: bold; font-size: 10pt; padding: 5px;">
+                DESDE EL SUELO
+            </td>
+            <td style="background-color: #e6f0ff;"></td>
+            <td style="background-color: #e6f0ff;"></td>
+            <td style="background-color: #e6f0ff;"></td>
+            <td style="background-color: #e6f0ff;"></td>
+        </tr>
+        <!-- FILA 1: Neumáticos (con imágenes rowspan para TODAS las filas de TODAS las secciones) -->
+        <tr>
+            <td>Neumáticos, ruedas, tuercas de las ruedas, tapas de los vástagos</td>
+            <td>Inflado, fugas, daño, desgaste</td>
+            <td class="col-bueno">{% if datos.neumaticos == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.neumaticos == 'Malo' %}✗{% endif %}</td>
+            <td rowspan="13" style="vertical-align: top;">
+                <div class="contenedor-imagenes">
+                    <div class="imagen-item"><img src="static/img/01.jpg" alt="Imagen 1"></div>
+                </div>
+            </td>
+        </tr>
+        <!-- FILA 2: Cilindros -->
+        <tr>
+            <td>Cilindros de levantamiento e inclinación, tuberías, mangueras del cucharón</td>
+            <td>Desgaste en exceso, daños, fugas</td>
+            <td class="col-bueno">{% if datos.cilindros == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.cilindros == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 3: Brazos -->
+        <tr>
+            <td>Brazos del bastidor del cargador</td>
+            <td>Desgaste en exceso, daños</td>
+            <td class="col-bueno">{% if datos.brazos == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.brazos == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 4: Debajo máquina -->
+        <tr>
+            <td>Debajo de la máquina</td>
+            <td>Fugas, daños</td>
+            <td class="col-bueno">{% if datos.debajo == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.debajo == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 5: Transmisión -->
+        <tr>
+            <td>Transmisión, caja de transferencia</td>
+            <td>Fugas</td>
+            <td class="col-bueno">{% if datos.transmision == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.transmision == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 6: Peldaños -->
+        <tr>
+            <td>Peldaños y agarraderas</td>
+            <td>Condición, limpieza</td>
+            <td class="col-bueno">{% if datos.peldanos == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.peldanos == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 7: Tanque combustible -->
+        <tr>
+            <td>Tanque de combustible (Inspección crítica)</td>
+            <td>Nivel de combustible (Mín. 1/4 tanque), daños, fugas</td>
+            <td class="col-bueno">{% if datos.tanque_combustible == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.tanque_combustible == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 8: Aceite diferencial -->
+        <tr>
+            <td>Aceite del diferencial y del mando final</td>
+            <td>Fugas</td>
+            <td class="col-bueno">{% if datos.aceite_diferencial == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.aceite_diferencial == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 9: Ejes -->
+        <tr>
+            <td>Ejes – Mandos finales, diferenciales, frenos, sellos Duo-cone (Inspección crítica)</td>
+            <td>Fugas, daños, desgaste</td>
+            <td class="col-bueno">{% if datos.ejes == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.ejes == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 10: Tanque hidráulico -->
+        <tr>
+            <td>Tanque hidráulico</td>
+            <td>Nivel de fluido, daños, fugas (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.tanque_hidraulico == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.tanque_hidraulico == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 11: Aceite transmisión -->
+        <tr>
+            <td>Aceite de la transmisión (Inspección crítica)</td>
+            <td>Nivel de fluido (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.aceite_transmision == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.aceite_transmision == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 12: Luces -->
+        <tr>
+            <td>Luces, delanteras y traseras (Inspección crítica)</td>
+            <td>Funcionamiento, daños de lentes, caja o cables</td>
+            <td class="col-bueno">{% if datos.luces == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.luces == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 13: Compartimiento batería -->
+        <tr>
+            <td>Compartimiento de la batería</td>
+            <td>Limpieza, tuercas y pernos flojos</td>
+            <td class="col-bueno">{% if datos.bateria == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.bateria == 'Malo' %}✗{% endif %}</td>
+        </tr>
+
+        <!-- ========= SECCIÓN 2: COMPARTIMIENTO DEL MOTOR ========= -->
+        <!-- FILA TÍTULO DE SECCIÓN -->
+        <tr class="fila-titulo-seccion">
+            <td colspan="5" style="background-color: #e6f0ff; font-weight: bold; font-size: 10pt; padding: 5px;">
+                COMPARTIMIENTO DEL MOTOR
+            </td>
+        </tr>
+        <!-- FILA 14: Aceite motor -->
+        <tr>
+            <td>Aceite del motor</td>
+            <td>Nivel de fluido (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.aceite_motor == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.aceite_motor == 'Malo' %}✗{% endif %}</td>
+            <td rowspan="7" style="vertical-align: top;">
+                <div class="contenedor-imagenes">
+                    <div class="imagen-item"><img src="static/img/02.jpg" alt="Imagen 2"></div>
+                </div>
+            </td>
+        </tr>
+
+        <!-- FILA 15: Refrigerante -->
+        <tr>
+            <td>Refrigerante del motor</td>
+            <td>Nivel de fluido (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.refrigerante == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.refrigerante == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 16: Radiador -->
+        <tr>
+            <td>Radiador</td>
+            <td>Obstrucción de aletas, fugas</td>
+            <td class="col-bueno">{% if datos.radiador == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.radiador == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 17: Mangueras -->
+        <tr>
+            <td>Todas las mangueras</td>
+            <td>Fisuras, marcas de desgaste, fugas</td>
+            <td class="col-bueno">{% if datos.mangueras == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.mangueras == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 18: Filtros combustible -->
+        <tr>
+            <td>Filtros de combustible/separador de agua</td>
+            <td>Fugas/agua de drenaje (si tiene)</td>
+            <td class="col-bueno">{% if datos.filtros == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.filtros == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 19: Filtro aire -->
+        <tr>
+            <td>Filtro de aire</td>
+            <td>Indicador de obstrucción</td>
+            <td class="col-bueno">{% if datos.filtro_aire == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.filtro_aire == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 20: Compartimiento motor -->
+        <tr>
+            <td>Compartimiento del motor</td>
+            <td>Acumulación de residuos o tierra, fugas</td>
+            <td class="col-bueno">{% if datos.compartimiento_motor == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.compartimiento_motor == 'Malo' %}✗{% endif %}</td>
+        </tr>
+
+        <!-- ========= SECCIÓN 3: EN LA MÁQUINA, FUERA DE LA CABINA ========= -->
+        <!-- FILA TÍTULO DE SECCIÓN -->
+        <tr class="fila-titulo-seccion">
+            <td colspan="5" style="background-color: #e6f0ff; font-weight: bold; font-size: 10pt; padding: 5px;">
+                EN LA MÁQUINA, FUERA DE LA CABINA
+            </td>
+        </tr>
+        <!-- FILA 21: Agarraderas -->
+        <tr>
+            <td>Agarraderas</td>
+            <td>Condición y limpieza</td>
+            <td class="col-bueno">{% if datos.agarraderas == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.agarraderas == 'Malo' %}✗{% endif %}</td>
+            <td rowspan="6" style="vertical-align: top;">
+                <div class="contenedor-imagenes">
+                    <div class="imagen-item"><img src="static/img/03.jpg" alt="Imagen 3"></div>
+                </div>
+            </td>
+        </tr>
+        <!-- FILA 22: ROPS -->
+        <tr>
+            <td>ROPS</td>
+            <td>Daños, pernos de montaje flojos</td>
+            <td class="col-bueno">{% if datos.rops == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.rops == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 23: Extintor -->
+        <tr>
+            <td>Extintor/sistema contra incendios</td>
+            <td>Carga, daños</td>
+            <td class="col-bueno">{% if datos.extintor == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.extintor == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 24: Parabrisas -->
+        <tr>
+            <td>Parabrisas, ventanas</td>
+            <td>Vidrios rotos, limpieza</td>
+            <td class="col-bueno">{% if datos.parabrisas == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.parabrisas == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 25: Limpiaparabrisas -->
+        <tr>
+            <td>Limpia/Lavaparabrisas</td>
+            <td>Desgaste, daños/nivel de fluido</td>
+            <td class="col-bueno">{% if datos.limpia == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.limpia == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 26: Puertas -->
+        <tr>
+            <td>Puertas</td>
+            <td>Abren apropiadamente, vidrios rotos</td>
+            <td class="col-bueno">{% if datos.puertas == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.puertas == 'Malo' %}✗{% endif %}</td>
+        </tr>
+
+        <!-- ========= SECCIÓN 4: DENTRO DE LA CABINA ========= -->
+        <!-- FILA TÍTULO DE SECCIÓN -->
+        <tr class="fila-titulo-seccion">
+            <td colspan="5" style="background-color: #e6f0ff; font-weight: bold; font-size: 10pt; padding: 5px;">
+                DENTRO DE LA CABINA
+            </td>
+        </tr>
+        <!-- FILA 27: Asiento -->
+        <tr>
+            <td>Asiento</td>
+            <td>Ajuste de altura, peso, se pueden alcanzar los pedales</td>
+            <td class="col-bueno">{% if datos.asiento == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.asiento == 'Malo' %}✗{% endif %}</td>
+            <td rowspan="10" style="vertical-align: top;">
+                <div class="contenedor-imagenes">
+                    <div class="imagen-item"><img src="static/img/04.jpg" alt="Imagen 4"></div>
+                </div>
+            </td>
+        </tr>
+        <!-- FILA 28: Apoyo cabina -->
+        <tr>
+            <td>Revisar la operatividad de los puntos de apoyo de ingreso a cabina</td>
+            <td>Operatividad</td>
+            <td class="col-bueno">{% if datos.apoyo == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.apoyo == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 29: Cinturón -->
+        <tr>
+            <td>Cinturón de seguridad y montaje</td>
+            <td>Daño, desgaste, ajuste, antigüedad</td>
+            <td class="col-bueno">{% if datos.cinturon == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.cinturon == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 30: Bocina -->
+        <tr>
+            <td>Bocina, circulina, alarma de retroceso, luces</td>
+            <td>Funcionamiento correcto (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.bocina == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.bocina == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 31: Espejos -->
+        <tr>
+            <td>Espejos</td>
+            <td>Daños, ajustar para mejor visibilidad</td>
+            <td class="col-bueno">{% if datos.espejos == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.espejos == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 32: Filtro cabina -->
+        <tr>
+            <td>Filtro de aire de la cabina</td>
+            <td>Tierra, polvo</td>
+            <td class="col-bueno">{% if datos.filtro_cabina == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.filtro_cabina == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 33: Medidores -->
+        <tr>
+            <td>Medidores, indicadores, interruptores, controles</td>
+            <td>Daños, funcionamiento</td>
+            <td class="col-bueno">{% if datos.medidores == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.medidores == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 34: Interior cabina -->
+        <tr>
+            <td>Interior de la cabina</td>
+            <td>Limpieza</td>
+            <td class="col-bueno">{% if datos.interior == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.interior == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 35: Frenos -->
+        <tr>
+            <td>Freno de servicio, neutralizador, estacionamiento</td>
+            <td>Funcionamiento correcto (Inspección crítica)</td>
+            <td class="col-bueno">{% if datos.frenos == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.frenos == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 36: Volante -->
+        <tr>
+            <td>Volante de dirección (Inspección crítica)</td>
+            <td>Funcionamiento correcto</td>
+            <td class="col-bueno">{% if datos.volante == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.volante == 'Malo' %}✗{% endif %}</td>
+        </tr>
+
+        <!-- ========= SECCIÓN 5: CUCHARÓN ========= -->
+        <!-- FILA TÍTULO DE SECCIÓN -->
+        <tr class="fila-titulo-seccion">
+            <td colspan="5" style="background-color: #e6f0ff; font-weight: bold; font-size: 10pt; padding: 5px;">
+                CUCHARÓN
+            </td>
+        </tr>
+        <!-- FILA 37: Cuchilla empernable -->
+        <tr>
+            <td>Cuchilla empernable</td>
+            <td>Desgaste en exceso, dobladura, daños</td>
+            <td class="col-bueno">{% if datos.cuchilla_empernable == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.cuchilla_empernable == 'Malo' %}✗{% endif %}</td>
+            <td rowspan="8" style="vertical-align: top;">
+                <div class="contenedor-imagenes">
+                    <div class="imagen-item"><img src="static/img/05.jpg" alt="Imagen 5"></div>
+                </div>
+            </td>
+        </tr>
+        <!-- FILA 38: Segmento -->
+        <tr>
+            <td>Segmento empernable</td>
+            <td>Desgaste en exceso, daños</td>
+            <td class="col-bueno">{% if datos.segmento == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.segmento == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 39: Protector -->
+        <tr>
+            <td>Protector de base lateral</td>
+            <td>Desgaste en exceso, daños</td>
+            <td class="col-bueno">{% if datos.protector == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.protector == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 40: Cuchilla base -->
+        <tr>
+            <td>Cuchilla base</td>
+            <td>Desgaste en exceso, dobladura, daños</td>
+            <td class="col-bueno">{% if datos.cuchilla_base == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.cuchilla_base == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 41: Borde ataque -->
+        <tr>
+            <td>Borde de ataque del cucharón, vertedera</td>
+            <td>Desgaste en exceso, dobladura, daños</td>
+            <td class="col-bueno">{% if datos.borde == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.borde == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 42: Plancha lateral -->
+        <tr>
+            <td>Plancha lateral, inferior</td>
+            <td>Desgaste en exceso, daños</td>
+            <td class="col-bueno">{% if datos.plancha == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.plancha == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 43: Cordón soldadura -->
+        <tr>
+            <td>Cordón soldadura</td>
+            <td>Fractura</td>
+            <td class="col-bueno">{% if datos.soldadura == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.soldadura == 'Malo' %}✗{% endif %}</td>
+        </tr>
+        <!-- FILA 44: Pasadores -->
+        <tr>
+            <td>Pasadores y bujes</td>
+            <td>Desgaste en exceso, daños</td>
+            <td class="col-bueno">{% if datos.pasadores == 'Bueno' %}✓{% endif %}</td>
+            <td class="col-malo">{% if datos.pasadores == 'Malo' %}✗{% endif %}</td>
+        </tr>
+
+    </table>
+
+    <!-- OBSERVACIONES Y FIRMAS -->
+    <div style="margin-top: 15px;">
+        <strong>OBSERVACIONES:</strong>
+        <div class="observaciones-box">
+            {{ datos.observaciones or '' }}
+        </div>
+    </div>
+
+    <!-- FIRMAS -->
+    <table class="firmas">
+        <tr>
+            <td>__________________________</td>
+            <td>__________________________</td>
+            <td>__________________________</td>
+        </tr>
+        <tr>
+            <td>Firma Operador Entrega</td>
+            <td>Firma Operador Devolución</td>
+            <td>Firma Supervisor</td>
+        </tr>
+    </table>
+
+    <!-- FECHA DE GENERACIÓN -->
+    <div style="text-align: right; margin-top: 10px; font-size: 7pt; color: #666;">
+        Documento generado: {{ datos.fecha_generacion or '' }}
+    </div>
+
+    <!-- REGLAS DEL BUEN OPERADOR - NUEVA PÁGINA CON TEXTO HORIZONTAL CENTRADO -->
+    <div style="page-break-before: always; margin-top: 20px;">
+        <h3 style="text-align: center; font-weight: bold; font-size: 14pt; margin-bottom: 20px;">REGLAS DEL BUEN OPERADOR</h3>
+        
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <div style="width: 80%; max-width: 800px; text-align: left; line-height: 1.6; font-size: 10pt; margin: 0 auto;">
+                <p>● El operador que retira un equipo es el responsable directo de su máquina.</p>
+                <p>● El operador hará su Check List con su relevo, caso contrario la responsabilidad recaerá en el primer operador.</p>
+                <p>● El equipo deberá ser lavado en forma general una vez a la semana en los siguientes sistemas: articulaciones, bastidor, cabina, diferencial, transmisión, motor, radiador y enfriadores de aceite; deberán llamar al mike2 para retirar y colocar las tapas de los conjuntos de válvulas.</p>
+                <p>● Está prohibido llevar carga encima del equipo.</p>
+                <p>● Las papeletas tendrán vigencia hasta las 00:00 horas, pasada esta hora el operador tendrá que hacer una nueva papeleta del equipo.</p>
+                <p>● Los equipos deberán ser entregados al responsable de guardia en el patio de minerales.</p>
+                <p>● Quedan prohibidas las adiciones o modificaciones no autorizadas.</p>
+                <p>● Evite poner cargas descentradas.</p>
+                <p>● No permita que pasajeros viajen con usted.</p>
+                <p>● No utilice el pasador de la barra de tracción para remolcar cargas.</p>
+                <p>● Cualquier daño en el equipo debe ser informado al mecánico de guardia; su omisión será considerada una falta grave.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
